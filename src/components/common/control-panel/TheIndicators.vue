@@ -1,30 +1,41 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { computed } from 'vue'
+import { fieldNames } from '../../../types/fieldNames.ts'
 
 const props = defineProps<({
-  signal?: any
+  shownData?: any
   fields?: string[]
-  labels?: any
 })>()
 
+const model = defineModel()
+
+const labels = fieldNames;
+
+
 const normalizedSignal = computed(() => {
- return  props.fields.reduce((acc, field) => {
-    acc[field] = Math.round(props.signal[field]['V'] * 100) / 100
+  if (props.shownData) {
+    return  props.fields.reduce((acc, field) => {
+      acc[field] = (props.shownData[field] && isNaN(props.shownData[field]) ? "n/d" : Math.round(props.shownData[field] * 100) / 100)
+      return acc
+    }, {})
+  }
+  return  props.fields.reduce((acc, field) => {
+    acc[field] = "n/d"
     return acc
   }, {})
 })
 
-const selectedCategory = ref(props.fields[0]);
+
 
 </script>
 
 <template>
 <div class="indicator__container">
-  <div class="indicator__group" v-for="(field, index) in fields">
+  <div class="indicator__group" v-for="(field, index) in fields" v-if="normalizedSignal">
     <div class="indicator__name">  {{labels[field]}}</div>
     <div class="indicator__value">{{normalizedSignal[field]}}</div>
-    <RadioButton v-model="selectedCategory" :value="fields[index]" />
+    <RadioButton v-model="model" :value="fields[index]" />
   </div>
 </div>
 </template>

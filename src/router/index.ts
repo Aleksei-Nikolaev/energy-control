@@ -6,21 +6,27 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      beforeEnter: (to, from, next) => {
-        next('/boiler');
-      }
+      redirect: '/block1'
     },
     {
-      path: '/boiler',
-      name: 'Boiler',
-      component: () => import('../views/TheBoiler.vue'),
-    },
-    {
-      path: '/turbine',
-      name: 'Turbine',
-      component: () => import('../views/TheTurbine.vue'),
-    },
-  ],
+      path: '/:block(block1)',
+      name: 'Block',
+      component: () => import('../views/TheBlock.vue'),
+      redirect: to => `${to.path}/turbine`,
+      children: [
+        {
+          path: 'boiler',
+          name: 'Boiler',
+          component: () => import('../views/block/TheBoiler.vue')
+        },
+        {
+          path: 'turbine',
+          name: 'Turbine',
+          component: () => import('../views/block/TheTurbine.vue')
+        }
+      ]
+    }
+  ]
 })
 
 export default router

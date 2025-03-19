@@ -30,6 +30,15 @@ export default defineConfig({
         additionalData: `@import "@/assets/main.scss";`
       }
     }
-  }
+  },
+  server: {
+    proxy: {
+      '/last': {
+        target: 'http://localhost:9090',  // Адрес твоего бэкенда
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/last/, ''), // Убираем префикс '/last' при проксировании
 
+      },
+    },
+  },
 })

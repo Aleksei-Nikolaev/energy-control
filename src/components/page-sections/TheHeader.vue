@@ -1,27 +1,50 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-
-
 const items = ref([
   {
-    label: 'Котел',
-    route: '/boiler'
+    label: 'Блок 1',
+    route: '/block1'
+  },  {
+    label: 'Блок 2',
+    route: '/block2',
+    disabled: true
   },
   {
-    label: 'Турбина',
-    route: '/turbine'
+    label: 'Блок 3',
+    route: '/block3',
+    disabled: true
+  },
+  {
+    label: 'Теплосеть',
+    route: '/teploset',
+    disabled: true
+  },
+  {
+    label: 'Сводка',
+    route: '/svodka',
+    disabled: true
+  },
+  {
+    label: 'Пуск',
+    route: '/pusk',
+    disabled: true
+  },
+  {
+    label: 'Архив',
+    route: '/archive',
+    disabled: true
   }
 ]);
 
-
+const activeTab = computed(() => `/${route.params.block}`);
 </script>
 
 <template>
-  <Tabs :value="route.path">
+  <Tabs :value="activeTab">
     <TabList>
       <Tab
         v-ripple
@@ -30,12 +53,12 @@ const items = ref([
         :value="tab.route"
         as="router-link"
         :to="tab.route"
+        :disabled="tab.disabled"
       >
         <span>{{ tab.label }}</span>
       </Tab>
     </TabList>
   </Tabs>
-
 </template>
 
 <style lang="scss">

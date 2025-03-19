@@ -1,6 +1,9 @@
 a {
   text-decoration: none;
-  color: inherit;
   background: none;
   border: none;
+}
+
+html {
+  scrollbar-gutter: stable;
 }
