@@ -1,24 +1,33 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { fieldNames } from '@/types/fieldNames.ts'
 
 const props = defineProps<({
   archive?: any
+  field?: string
+  interval?: number
 })>()
 
-const dateArray = Object.keys(props.archive).sort((a, b) => new Date(a) - new Date(b))
+const chartData = ref();
+const chartOptions = ref();
 
-const charData = computed(() => {
+
+const normalizedData = computed(() => {
+  const dateArray = Object.keys(props.archive).sort((a, b) => new Date(a) - new Date(b))
+
   const zeroPoint = new Date(dateArray[dateArray.length - 1])
   return dateArray.reduce((acc, curr) => {
-    acc.push({
-      x: (new Date(curr) - zeroPoint) / 60000,
-      y: props.archive[curr]["V"]
-    })
+    if (props.archive[curr]["Valid"]) {
+      acc.push({
+        x: (new Date(curr) - zeroPoint) / 60000,
+        y: props.archive[curr]["V"]
+      })
+    }
     return acc
   }, [])
 })
 
-const setChartOptions = () => {
+const setChartOptions = (interval) => {
   const documentStyle = getComputedStyle(document.documentElement);
   const textColor = documentStyle.getPropertyValue('--p-text-color');
   const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
@@ -37,7 +46,7 @@ const setChartOptions = () => {
     scales: {
       x: {
         type: 'linear',
-        min: -30,
+        min: -interval,
         max: 0,
         grid: {
           color: surfaceBorder
@@ -56,23 +65,13 @@ const setChartOptions = () => {
   };
 }
 
-
-onMounted(() => {
-  chartData.value = setChartData("T жопы");
-  chartOptions.value = setChartOptions();
-});
-
-const chartData = ref();
-const chartOptions = ref();
-
-const setChartData = (label) => {
+const setChartData = (label, data) => {
   const documentStyle = getComputedStyle(document.documentElement);
-
   return {
     datasets: [
       {
         label: label,
-        data: charData.value,
+        data: data,
         fill: false,
         borderColor: documentStyle.getPropertyValue('--p-gray-500'),
         tension: 0.4
@@ -81,11 +80,20 @@ const setChartData = (label) => {
   };
 };
 
+onMounted(() => {
+  watch(() => normalizedData, (newValue) => {
+    chartOptions.value = setChartOptions(props.interval)
+    chartData.value = setChartData(fieldNames[props.field], newValue.value)
+  }, {
+    deep: true,
+    immediate: true
+  })
+});
+
 </script>
 
 <template>
   <Chart class="chart"  type="line" :data="chartData" :options="chartOptions" />
-
 </template>
 
 <style scoped lang="scss">

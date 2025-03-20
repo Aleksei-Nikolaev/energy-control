@@ -6,16 +6,17 @@ import axios from 'axios'
 import { RouterView } from 'vue-router'
 
 
-const fetchData = async () => {
+const fetchLastData = async () => {
   const { data } = await axios.get('http://localhost:9090/last')
   return data
 }
 
-const { data } = useQuery({
+const { data: lastData } = useQuery({
   queryKey: ['lastData'],
-  queryFn: fetchData,
+  queryFn: fetchLastData,
   refetchInterval: 1000
 })
+
 
 
 const route = useRoute()
@@ -55,7 +56,7 @@ const activeTab = computed(() => {
         </TabList>
       </Tabs>
     </nav>
-    <RouterView :signal="data"/>
+    <RouterView :signal="lastData"/>
   </div>
 </template>
 
