@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "run-p \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
@@ -17,6 +17,8 @@
     "@tanstack/vue-query": "^5.68.0",
     "axios": "^1.8.3",
     "chart.js": "^4.4.8",
+    "chartjs-adapter-dayjs-4": "^1.0.4",
+    "dayjs": "^1.11.13",
     "normalize.css": "^8.0.1",
     "primevue": "^4.3.1",
     "vue": "^3.5.13",

@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { fieldNames } from '@/types/fieldNames.ts'
+import dayjs from 'dayjs'
+import 'chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm';
+
+
 
 const props = defineProps<({
   archive?: any
@@ -13,13 +17,12 @@ const chartOptions = ref();
 
 
 const normalizedData = computed(() => {
-  const dateArray = Object.keys(props.archive).sort((a, b) => new Date(a) - new Date(b))
+  const dateArray = Object.keys(props.archive).sort((a, b) => dayjs(a).valueOf() - dayjs(b).valueOf())
 
-  const zeroPoint = new Date(dateArray[dateArray.length - 1])
   return dateArray.reduce((acc, curr) => {
     if (props.archive[curr]["Valid"]) {
       acc.push({
-        x: (new Date(curr) - zeroPoint) / 60000,
+        x: dayjs(curr).valueOf(),
         y: props.archive[curr]["V"]
       })
     }
@@ -38,20 +41,25 @@ const setChartOptions = (interval) => {
     aspectRatio: 0.6,
     plugins: {
       legend: {
-        labels: {
-          color: textColor
-        }
+        display: false
       }
     },
     scales: {
       x: {
-        type: 'linear',
-        min: -interval,
-        max: 0,
+        type: 'time',
+        time: {
+          unit: 'minute',
+          displayFormats: {
+            minute: 'HH:mm'
+          },
+        },
+        ticks: {
+          maxTicksLimit: 6,
+          autoSkip: true,
+        },
         grid: {
           color: surfaceBorder
         },
-
       },
       y: {
         ticks: {
@@ -65,12 +73,13 @@ const setChartOptions = (interval) => {
   };
 }
 
-const setChartData = (label, data) => {
+
+const setChartData = (labelFirst, labelSecond, data) => {
   const documentStyle = getComputedStyle(document.documentElement);
   return {
     datasets: [
       {
-        label: label,
+        label:  [labelFirst, labelSecond],
         data: data,
         fill: false,
         borderColor: documentStyle.getPropertyValue('--p-gray-500'),
@@ -80,24 +89,39 @@ const setChartData = (label, data) => {
   };
 };
 
-onMounted(() => {
-  watch(() => normalizedData, (newValue) => {
-    chartOptions.value = setChartOptions(props.interval)
-    chartData.value = setChartData(fieldNames[props.field], newValue.value)
-  }, {
-    deep: true,
-    immediate: true
-  })
-});
+watch(() => normalizedData, (newValue) => {
+  chartOptions.value = setChartOptions(props.interval)
+  chartData.value = setChartData(fieldNames[props.field], dayjs(newValue.value[newValue.value.length - 1]["x"]).format("HH:mm DD/MM/YYYY"), newValue.value)
+}, {
+  deep: true,
+  immediate: true
+})
+
+
 
 </script>
 
 <template>
+  <div class="chart__heading-container">
+    <h3 class="chart__heading">{{fieldNames[field]}}</h3>
+    <p class="chart__heading">{{dayjs(normalizedData[normalizedData.length - 1]["x"]).format("Время HH:mm Дата DD/MM/YYYY")}}</p>
+  </div>
   <Chart class="chart"  type="line" :data="chartData" :options="chartOptions" />
 </template>
 
 <style scoped lang="scss">
 .chart {
   height: 100%;
+
+  &__heading {
+    margin: 0;
+
+    &-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px
+    }
+  }
 }
 </style>

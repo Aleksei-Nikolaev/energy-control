@@ -84,11 +84,12 @@ const intervals = ref([
   &__right {
     display: flex;
     flex-direction: column;
+    gap: 10px;
     width: 400px;
     height: 600px;
 
     &-select {
-      margin-top: 10px;
+      margin-top: auto;
       margin-left: auto;
     }
   }
