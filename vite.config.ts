@@ -24,21 +24,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "@/assets/main.scss";`
+        additionalData: [`@use "@/assets/styles/main.scss" as *;`]
       }
     }
-  },
-  server: {
-    proxy: {
-      '/last': {
-        target: 'http://localhost:9090',  // Адрес твоего бэкенда
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/last/, ''), // Убираем префикс '/last' при проксировании
-
-      },
-    },
   },
 })

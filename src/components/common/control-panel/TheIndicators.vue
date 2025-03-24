@@ -47,6 +47,10 @@ const normalizedSignal = computed(() => {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
     width: 100%;
+
+    @include lg {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
 
   &__group {

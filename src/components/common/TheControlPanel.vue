@@ -26,7 +26,7 @@ const fetchProps = ref({
 
 const fetchIndicatorArchive = async (fetchParams) => {
   const { field, interval } = fetchParams
-  const { data } = await axios.get(`http://localhost:9090/duration/${field}/${interval}`)
+  const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/duration/${field}/${interval}`)
   return data
 }
 
@@ -75,10 +75,18 @@ const intervals = ref([
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
+
   }
 
   &__left {
     width: 800px;
+    @include xl {
+      width: 700px;
+    }
+
+    @include lg {
+      width: 400px;
+    }
   }
 
   &__right {

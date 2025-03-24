@@ -7,7 +7,7 @@ import { RouterView } from 'vue-router'
 
 
 const fetchLastData = async () => {
-  const { data } = await axios.get('http://localhost:9090/last')
+  const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/last`)
   return data
 }
 

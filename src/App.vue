@@ -21,6 +21,15 @@ document.documentElement.classList.add('my-app-dark')
   width: 1400px;
   margin: 0 auto;
   padding: 34px 60px;
+
+  @include xl {
+    width: 1200px;
+    padding: 34px 20px;
+  }
+
+  @include lg {
+    width: 1000px;
+  }
 }
 
 header {
