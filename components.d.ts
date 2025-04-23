@@ -8,7 +8,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Bibanew: typeof import('./src/components/common/control-panel/bibanew.vue')['default']
     Chart: typeof import('primevue/chart')['default']
+    Checkbox: typeof import('primevue/checkbox')['default']
     RadioButton: typeof import('primevue/radiobutton')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

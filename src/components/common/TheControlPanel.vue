@@ -20,16 +20,21 @@ const shownData = computed(() => {
 })
 
 const fetchProps = ref({
-  field: props.fields[0],
+  fields: [props.fields[0]],
   interval: 30,
 })
 
-const fetchIndicatorArchive = async (fetchParams) => {
-  const { field, interval } = fetchParams
-  const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/duration/${field}/${interval}`)
-  return data
+const fetchIndicatorArchive = async ({ fields, interval }) => {
+  const entries = await Promise.all(
+    fields.map(async (field) => {
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/duration/${field}/${interval}`,
+      )
+      return [field, data]
+    }),
+  )
+  return Object.fromEntries(entries)
 }
-
 const { data: archive } = useQuery({
   queryKey: ['fetchData', fetchProps.value],
   queryFn: () => fetchIndicatorArchive(fetchProps.value),
@@ -48,13 +53,13 @@ const intervals = ref([
 <template>
   <div class="control-panel__wrapper">
     <div class="control-panel__left">
-      <TheIndicators v-model="fetchProps.field" :fields="fields" :shown-data="shownData" />
+      <TheIndicators v-model="fetchProps.fields" :fields="fields" :shown-data="shownData" />
     </div>
     <div class="control-panel__right">
       <TheChart
-        v-if="archive && archive.response"
-        :archive="archive.response[fetchProps.field]"
-        :field="fetchProps.field"
+        v-if="archive"
+        :archive="archive"
+        :fields="fetchProps.fields"
         :interval="fetchProps.interval"
       />
       <Select
@@ -76,6 +81,10 @@ const intervals = ref([
     flex-direction: row;
     justify-content: space-between;
 
+    @include lg {
+      justify-content: left;
+      gap: 30px;
+    }
   }
 
   &__left {
@@ -87,6 +96,10 @@ const intervals = ref([
     @include lg {
       width: 400px;
     }
+
+    @include sm {
+      width: 100%;
+    }
   }
 
   &__right {
@@ -95,6 +108,10 @@ const intervals = ref([
     gap: 10px;
     width: 400px;
     height: 600px;
+
+    @include sm {
+      display: none;
+    }
 
     &-select {
       margin-top: auto;

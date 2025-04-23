@@ -46,7 +46,7 @@ const activeTab = computed(() => `/${route.params.block}`);
 <template>
   <Tabs :value="activeTab">
     <TabList>
-      <Tab
+      <Tab class="header__navbar"
         v-ripple
         v-for="tab in items"
         :key="tab.label"
@@ -62,7 +62,11 @@ const activeTab = computed(() => `/${route.params.block}`);
 </template>
 
 <style lang="scss">
-
+.header__navbar {
+  @include sm {
+    font-size: 26px;
+  }
+}
 
 
 </style>

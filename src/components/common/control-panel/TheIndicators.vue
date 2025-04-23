@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { computed } from 'vue'
 import { fieldNames } from '../../../types/fieldNames.ts'
 
@@ -35,7 +34,7 @@ const normalizedSignal = computed(() => {
   <div class="indicator__group" v-for="(field, index) in fields" v-if="normalizedSignal">
     <div class="indicator__name">  {{labels[field]}}</div>
     <div class="indicator__value">{{normalizedSignal[field]}}</div>
-    <RadioButton v-model="model" :value="fields[index]" />
+    <Checkbox class="indicator__radio" v-model="model" :value="fields[index]" />
   </div>
 </div>
 </template>
@@ -67,6 +66,11 @@ const normalizedSignal = computed(() => {
     border-radius: 4px;
     box-sizing: border-box;
     color: black;
+
+    @include sm {
+      font-size: 36px;
+      font-weight: bold;
+    }
   }
 
   &__name {
@@ -83,6 +87,16 @@ const normalizedSignal = computed(() => {
     color: black;
     height: 100%;
     font-weight: bold;
+
+    @include sm {
+      min-width: 120px;
+    }
+  }
+
+  &__radio {
+    @include sm {
+      display: none;
+    }
   }
 }
 

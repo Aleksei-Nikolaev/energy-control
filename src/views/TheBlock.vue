@@ -64,5 +64,10 @@ const activeTab = computed(() => {
 .block_navbar {
   display: flex;
   margin-bottom: 10px;
+
+  @include sm {
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
 }
 </style>
