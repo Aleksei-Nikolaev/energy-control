@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheControlPanel from '@/components/common/TheControlPanel.vue'
+import { TheControlPanel } from '@/widgets'
 
 defineProps<{
   signal?: any

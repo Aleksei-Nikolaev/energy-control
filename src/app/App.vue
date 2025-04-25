@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import TheHeader from '@/components/page-sections/TheHeader.vue'
-
+import { TheHeader } from '@/widgets'
 
 document.documentElement.classList.add('my-app-dark')
-
 </script>
 
 <template>
   <div class="content">
     <header>
-      <TheHeader />
+      <TheHeader class="header" />
     </header>
     <RouterView  />
   </div>
@@ -32,7 +30,7 @@ document.documentElement.classList.add('my-app-dark')
   }
 }
 
-header {
+.header {
   display: flex;
   margin-bottom: 10px;
 }

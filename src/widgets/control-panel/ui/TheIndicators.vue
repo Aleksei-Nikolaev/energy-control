@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { fieldNames } from '../../../types/fieldNames.ts'
+import { fieldNames } from '../../../shared/config/fieldNames.ts'
 
 const props = defineProps<({
   shownData?: any
@@ -24,9 +24,6 @@ const normalizedSignal = computed(() => {
     return acc
   }, {})
 })
-
-
-
 </script>
 
 <template>
@@ -34,7 +31,7 @@ const normalizedSignal = computed(() => {
   <div class="indicator__group" v-for="(field, index) in fields" v-if="normalizedSignal">
     <div class="indicator__name">  {{labels[field]}}</div>
     <div class="indicator__value">{{normalizedSignal[field]}}</div>
-    <Checkbox class="indicator__radio" v-model="model" :value="fields[index]" />
+    <Checkbox class="indicator__radio" v-model="model" :value="fields?.[index]" />
   </div>
 </div>
 </template>

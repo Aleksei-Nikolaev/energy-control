@@ -1,41 +1,24 @@
 import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import App from './app/App.vue'
+import { router } from '@/app/router'
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import PrimeVue from 'primevue/config'
-import Aura from '@primeuix/themes/aura'
-import { definePreset } from '@primeuix/themes'
+import { themePreset } from '@/shared/config/themePreset'
+import apiPlugin from '@/app/providers/api/apiPlugin'
 
 const app = createApp(App)
-
-app.use(router)
-app.use(VueQueryPlugin)
-
-const MyPreset = definePreset(Aura, {
-  semantic: {
-    primary: {
-      50: '#fefce8',
-      100: '#fef9c3',
-      200: '#fef08a',
-      300: '#fde047',
-      400: '#facc15',
-      500: '#eab308',
-      600: '#ca8a04',
-      700: '#a16207',
-      800: '#854d0e',
-      900: '#713f12',
-      950: '#422006',
-    },
-  },
-})
-
-app.use(PrimeVue, {
+  .use(router)
+  .use(VueQueryPlugin)
+  .use(apiPlugin)
+  .use(PrimeVue, {
   theme: {
-    preset: MyPreset,
+    preset: themePreset,
     options: {
       darkModeSelector: '.my-app-dark',
     },
   },
 })
+
+document.title = 'Показания оборудования'
 
 app.mount('#app')

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { fieldNames } from '@/types/fieldNames.ts'
+import { fieldNames } from '@/shared/config/fieldNames'
 import dayjs from 'dayjs'
 import 'chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm';
 
@@ -36,9 +36,8 @@ const normalizedData = computed(() => {
   }, {})
 })
 
-const setChartOptions = (interval) => {
+const setChartOptions = () => {
   const documentStyle = getComputedStyle(document.documentElement);
-  const textColor = documentStyle.getPropertyValue('--p-text-color');
   const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
   const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
 

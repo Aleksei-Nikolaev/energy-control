@@ -4,16 +4,18 @@ import { computed } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import axios from 'axios'
 import { RouterView } from 'vue-router'
+import { useFetchSensorValues } from '@/features/sensor-values/useFetchCurrencyRates'
 
+const {fetchValues} = useFetchSensorValues()
 
-const fetchLastData = async () => {
-  const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/last`)
-  return data
-}
+// const fetchLastData = async () => {
+//   const { data } = await fetchValues()
+//   return data
+// }
 
 const { data: lastData } = useQuery({
   queryKey: ['lastData'],
-  queryFn: fetchLastData,
+  queryFn: fetchValues,
   refetchInterval: 1000
 })
 
@@ -30,7 +32,7 @@ const items = [
     label: 'Котел',
     route: 'boiler'
   }
-  ]
+]
 
 const activeTab = computed(() => {
   const segments = route.path.split('/').filter(Boolean);

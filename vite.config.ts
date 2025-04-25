@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-
+import Checker from 'vite-plugin-checker'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
@@ -13,6 +13,9 @@ export default defineConfig({
   plugins: [
     vue(),
     vueDevTools(),
+    Checker({
+      vueTsc: true
+    }),
     Components({
       resolvers: [
         PrimeVueResolver()
@@ -28,7 +31,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: [`@use "@/assets/styles/main.scss" as *;`]
+        additionalData: [`@use "@/app/styles/main.scss" as *;`]
       }
     }
   },

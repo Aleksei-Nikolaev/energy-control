@@ -8,20 +8,14 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Bibanew: typeof import('./src/components/common/control-panel/bibanew.vue')['default']
     Chart: typeof import('primevue/chart')['default']
     Checkbox: typeof import('primevue/checkbox')['default']
-    RadioButton: typeof import('primevue/radiobutton')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Select: typeof import('primevue/select')['default']
     Tab: typeof import('primevue/tab')['default']
     TabList: typeof import('primevue/tablist')['default']
     Tabs: typeof import('primevue/tabs')['default']
-    TheChart: typeof import('./src/components/common/control-panel/TheChart.vue')['default']
-    TheControlPanel: typeof import('./src/components/common/TheControlPanel.vue')['default']
-    TheHeader: typeof import('./src/components/page-sections/TheHeader.vue')['default']
-    TheIndicators: typeof import('./src/components/common/control-panel/TheIndicators.vue')['default']
   }
   export interface ComponentCustomProperties {
     Ripple: typeof import('primevue/ripple')['default']
