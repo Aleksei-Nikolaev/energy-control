@@ -1,16 +1,25 @@
 import { computed, ref, toRefs } from 'vue'
 import axios from 'axios'
 import { useQuery } from '@tanstack/vue-query'
+import { ControlPanelProps } from '@/widgets/control-panel/types/ControlPanelProps'
 
-export const useControlPanel = (props) => {
+export const useControlPanel = (props: ControlPanelProps) => {
   const { signal, fields } = toRefs(props)
 
   const shownData = computed(() => {
     if (signal.value) {
-      return fields.value.reduce((acc, curr) => {
-        acc[curr] = signal.value[curr]?.Valid ? signal.value[curr].V : 'n/d'
-        return acc
-      }, {})
+      return fields.value.reduce(
+        (acc, curr) => {
+          const sensorValue = signal.value[curr]
+          if (sensorValue && typeof sensorValue === 'object' && 'Valid' in sensorValue) {
+            acc[curr] = sensorValue.Valid ? sensorValue.V : 'n/d'
+          } else {
+            acc[curr] = 'n/d'
+          }
+          return acc
+        },
+        {} as Record<string, string | number>,
+      )
     }
   })
 
@@ -24,7 +33,7 @@ export const useControlPanel = (props) => {
     queryFn: () => fetchIndicatorArchive(fetchProps.value),
   })
 
-  const fetchIndicatorArchive = async ({ fields, interval }) => {
+  const fetchIndicatorArchive = async ({ fields, interval }: { fields: string[]; interval: number }) => {
     const entries = await Promise.all(
       fields.map(async (field) => {
         const { data } = await axios.get(
@@ -35,8 +44,6 @@ export const useControlPanel = (props) => {
     )
     return Object.fromEntries(entries)
   }
-
-
 
   const intervals = ref([
     { name: '30 мин', value: 30 },
@@ -51,6 +58,6 @@ export const useControlPanel = (props) => {
     intervals,
     fetchProps,
     shownData,
-    archive
+    archive,
   }
 }

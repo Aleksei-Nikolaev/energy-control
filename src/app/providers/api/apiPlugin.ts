@@ -10,7 +10,7 @@ let $api: IApi
 
 export const createApiClient = (): IApi => {
     const httpClient: AxiosInstance = axios.create({
-        baseURL: import.meta.env.VITE_API_BASE_URL
+        baseURL: import.meta.env.VITE_API_URL
     })
 
     return {

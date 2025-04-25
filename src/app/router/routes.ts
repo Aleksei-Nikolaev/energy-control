@@ -1,5 +1,5 @@
 import {Block, Boiler, Turbine} from '@/pages/block'
-import { RouteLocationNormalized, RouteRecordRaw  } from 'vue-router';
+import { RouteLocationGeneric, RouteRecordRaw  } from 'vue-router';
 
 
 export const routes: RouteRecordRaw[] = [
@@ -12,7 +12,7 @@ export const routes: RouteRecordRaw[] = [
     path: '/:block(block1)',
     name: 'Block',
     component: Block,
-    redirect: (to: RouteLocationNormalized) => `${to.path}/turbine`,
+    redirect: (to: RouteLocationGeneric) => `${to.path}/turbine`,
     children: [
       {
         path: 'boiler',

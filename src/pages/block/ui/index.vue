@@ -1,17 +1,11 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { computed} from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import axios from 'axios'
 import { RouterView } from 'vue-router'
 import { useFetchSensorValues } from '@/features/sensor-values/useFetchCurrencyRates'
 
 const {fetchValues} = useFetchSensorValues()
-
-// const fetchLastData = async () => {
-//   const { data } = await fetchValues()
-//   return data
-// }
 
 const { data: lastData } = useQuery({
   queryKey: ['lastData'],
@@ -19,10 +13,7 @@ const { data: lastData } = useQuery({
   refetchInterval: 1000
 })
 
-
-
 const route = useRoute()
-
 
 const items = [
   {
@@ -36,7 +27,7 @@ const items = [
 
 const activeTab = computed(() => {
   const segments = route.path.split('/').filter(Boolean);
-  return segments.pop();
+  return segments.pop() || '';
 });
 </script>
 

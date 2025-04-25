@@ -2,11 +2,10 @@
 import TheIndicators from '@/widgets/control-panel/ui/TheIndicators.vue'
 import TheChart from '@/widgets/control-panel/ui/TheChart.vue'
 import { useControlPanel } from '@/widgets/control-panel/model/useControlPanel'
+import { ControlPanelProps } from '@/widgets/control-panel/types/ControlPanelProps'
 
-const props = defineProps<{
-  signal?: any
-  fields?: string[]
-}>()
+const props = defineProps<ControlPanelProps>()
+
 
 const {fetchProps, intervals, shownData, archive} = useControlPanel(props)
 

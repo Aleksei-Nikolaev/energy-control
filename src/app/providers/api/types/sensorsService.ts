@@ -3,9 +3,9 @@ type SensorValue = {
   Valid: boolean;
 };
 
-export type getLastSensorValues = {
+export type lastSensorValues = {
   Id: number;
   date: string;
 } & {
   [key: string]: SensorValue | number | string;
-};
+}

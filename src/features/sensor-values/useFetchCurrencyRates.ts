@@ -3,7 +3,7 @@ import {$api} from "@/app/providers/api";
 export const useFetchSensorValues = () => {
     const {sensorService} = $api
 
-    const fetchValues= () => {
+    const fetchValues = () => {
         return sensorService.getValues()
     }
 

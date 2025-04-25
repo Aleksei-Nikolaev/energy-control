@@ -6,7 +6,6 @@ defineProps<{
   fieldNames?: any
 }>()
 
-
 const fields = [
   'p_par_do_sk',
   'q_par',
