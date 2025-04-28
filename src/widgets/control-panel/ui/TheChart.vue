@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue'
 import { fieldNames } from '@/shared/config/fieldNames'
 import dayjs from 'dayjs'
 import 'chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm';
+import { fieldColors } from '@/shared/config'
 
 
 
@@ -46,9 +47,28 @@ const setChartOptions = () => {
     aspectRatio: 0.6,
     plugins: {
       legend: {
-        display: true
+        display: true,
+        align: "start",
+        layout: 'vertical',
+        onClick: () => {},
+        labels: {
+          color: "lightgray",
+          usePointStyle: true,
+          pointStyle: 'line',
+          pointRadius: 100
+        }
       }
     },
+    elements: {
+      point: {
+        radius: 0,
+        hoverRadius: 6
+      },
+      line: {
+        borderWidth: 2
+      }
+    },
+
     scales: {
       x: {
         type: 'time',
@@ -80,14 +100,13 @@ const setChartOptions = () => {
 
 
 const setChartData = (fieldNames, fields,  data) => {
-  const documentStyle = getComputedStyle(document.documentElement);
   return {
     datasets: fields.reduce((acc, curr) => {
       acc.push({
         label:  fieldNames[curr],
         data: data[curr],
         fill: false,
-        borderColor: documentStyle.getPropertyValue('--p-gray-500'),
+        borderColor: fieldColors[curr],
         tension: 0.4
       })
       return acc
@@ -103,15 +122,9 @@ watch(() => normalizedData, (newValue) => {
   immediate: true
 })
 
-
-
 </script>
 
 <template>
-<!--    <div class="chart__heading-container">-->
-<!--      <h3 class="chart__heading">{{fieldNames[field]}}</h3>-->
-<!--      <p class="chart__heading">{{dayjs(normalizedData[normalizedData.length - 1]["x"]).format("Время HH:mm Дата DD/MM/YYYY")}}</p>-->
-<!--    </div>-->
     <Chart class="chart"  type="line" :data="chartData" :options="chartOptions" />
 </template>
 

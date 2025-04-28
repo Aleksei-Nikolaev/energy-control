@@ -1,6 +1,4 @@
-import { computed, ref, toRefs } from 'vue'
-import axios from 'axios'
-import { useQuery } from '@tanstack/vue-query'
+import { computed, ref, toRefs, inject } from 'vue'
 import { ControlPanelProps } from '@/widgets/control-panel/types/ControlPanelProps'
 
 export const useControlPanel = (props: ControlPanelProps) => {
@@ -28,22 +26,7 @@ export const useControlPanel = (props: ControlPanelProps) => {
     interval: 30,
   })
 
-  const { data: archive } = useQuery({
-    queryKey: ['fetchData', fetchProps.value],
-    queryFn: () => fetchIndicatorArchive(fetchProps.value),
-  })
 
-  const fetchIndicatorArchive = async ({ fields, interval }: { fields: string[]; interval: number }) => {
-    const entries = await Promise.all(
-      fields.map(async (field) => {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_API_URL}/duration/${field}/${interval}`,
-        )
-        return [field, data]
-      }),
-    )
-    return Object.fromEntries(entries)
-  }
 
   const intervals = ref([
     { name: '30 мин', value: 30 },
@@ -58,6 +41,5 @@ export const useControlPanel = (props: ControlPanelProps) => {
     intervals,
     fetchProps,
     shownData,
-    archive,
   }
 }

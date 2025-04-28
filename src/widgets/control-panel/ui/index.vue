@@ -3,11 +3,28 @@ import TheIndicators from '@/widgets/control-panel/ui/TheIndicators.vue'
 import TheChart from '@/widgets/control-panel/ui/TheChart.vue'
 import { useControlPanel } from '@/widgets/control-panel/model/useControlPanel'
 import { ControlPanelProps } from '@/widgets/control-panel/types/ControlPanelProps'
+import { useQuery } from '@tanstack/vue-query'
+import { useFetchArchive } from '@/features/archive/useFetchArchive'
 
 const props = defineProps<ControlPanelProps>()
 
+const {fetchArchive} = useFetchArchive()
+const {fetchProps, intervals, shownData} = useControlPanel(props)
 
-const {fetchProps, intervals, shownData, archive} = useControlPanel(props)
+const { data: archive } = useQuery({
+  queryKey: ['fetchData', fetchProps.value],
+  queryFn: () => fetchIndicatorArchive(fetchProps.value),
+})
+
+const fetchIndicatorArchive = async ({ fields, interval }: { fields: string[]; interval: number }) => {
+  const entries = await Promise.all(
+    fields.map(async (field) => {
+      const data  = await fetchArchive(field, interval)
+      return [field, data]
+    }),
+  )
+  return Object.fromEntries(entries)
+}
 
 </script>
 
