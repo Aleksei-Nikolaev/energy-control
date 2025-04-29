@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { fieldNames } from '../../../shared/config/fieldNames.ts'
+import { fieldNames } from '@/shared/config/constants'
+import { Fields, FieldValues } from '@/shared/config/types'
 
 const props = defineProps<({
-  shownData?: any
-  fields?: string[]
+  shownData: FieldValues
+  fields: Fields[]
 })>()
 
 const model = defineModel()
@@ -14,15 +15,16 @@ const labels = fieldNames;
 
 const normalizedSignal = computed(() => {
   if (props.shownData) {
-    return  props.fields.reduce((acc, field) => {
-      acc[field] = (props.shownData[field] && isNaN(props.shownData[field]) ? "n/d" : Math.round(props.shownData[field] * 100) / 100)
-      return acc
-    }, {})
+    return props.fields.reduce((acc, field) => {
+      const value = props.shownData[field];
+      if (typeof value === 'number' && !isNaN(value)) {
+        acc[field] = Math.round(value * 100) / 100;
+      } else {
+        acc[field] = "n/d";
+      }
+      return acc;
+    }, {} as FieldValues);
   }
-  return  props.fields.reduce((acc, field) => {
-    acc[field] = "n/d"
-    return acc
-  }, {})
 })
 </script>
 
@@ -72,8 +74,11 @@ const normalizedSignal = computed(() => {
 
   &__name {
     background: #ca8a04;
-    padding: 10px 0;
+    padding: 10px 4px;
     width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__value {

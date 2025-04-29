@@ -1,32 +1,34 @@
-import { computed, ref, toRefs, inject } from 'vue'
+import { computed, ref, toRefs } from 'vue'
 import { ControlPanelProps } from '@/widgets/control-panel/types/ControlPanelProps'
+import { FieldValues } from '@/shared/config/types'
 
 export const useControlPanel = (props: ControlPanelProps) => {
   const { signal, fields } = toRefs(props)
 
   const shownData = computed(() => {
-    if (signal.value) {
-      return fields.value.reduce(
-        (acc, curr) => {
-          const sensorValue = signal.value[curr]
+    return fields.value.reduce(
+      (acc, curr) => {
+        if (signal && signal.value) {
+          const currentValue = signal.value[curr]
+          const sensorValue = currentValue ? currentValue : null
+
           if (sensorValue && typeof sensorValue === 'object' && 'Valid' in sensorValue) {
             acc[curr] = sensorValue.Valid ? sensorValue.V : 'n/d'
-          } else {
-            acc[curr] = 'n/d'
           }
-          return acc
-        },
-        {} as Record<string, string | number>,
-      )
-    }
+        } else {
+          acc[curr] = 'n/d'
+        }
+
+        return acc
+      },
+      {} as FieldValues,
+    )
   })
 
   const fetchProps = ref({
     fields: [fields.value[0]],
     interval: 30,
   })
-
-
 
   const intervals = ref([
     { name: '30 мин', value: 30 },

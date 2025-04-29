@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { TheControlPanel } from '@/widgets'
+import { FieldNames, Fields } from '@/shared/config/types'
+import { LastSensorValues } from '@/app/providers/api/types'
 
 defineProps<{
-  signal?: any
-  fieldNames?: any
+  signal?: LastSensorValues
+  fieldNames?: FieldNames
 }>()
 
 const fields = [
@@ -31,7 +33,7 @@ const fields = [
   't_par_pered_pn130',
   't_vod_posle_pvd7',
   'p_par_k_psg2',
-]
+] as Fields[]
 </script>
 
 <template>

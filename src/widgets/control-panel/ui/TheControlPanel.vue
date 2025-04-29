@@ -5,6 +5,8 @@ import { useControlPanel } from '@/widgets/control-panel/model/useControlPanel'
 import { ControlPanelProps } from '@/widgets/control-panel/types/ControlPanelProps'
 import { useQuery } from '@tanstack/vue-query'
 import { useFetchArchive } from '@/features/archive/useFetchArchive'
+import { SensorArchive } from '@/entities'
+import { Fields } from '@/shared/config/types'
 
 const props = defineProps<ControlPanelProps>()
 
@@ -17,13 +19,15 @@ const { data: archive } = useQuery({
 })
 
 const fetchIndicatorArchive = async ({ fields, interval }: { fields: string[]; interval: number }) => {
-  const entries = await Promise.all(
+  const dataObject: SensorArchive = {}
+  await Promise.all(
     fields.map(async (field) => {
       const data  = await fetchArchive(field, interval)
-      return [field, data]
+      dataObject[field as Fields] = data.response[field as Fields]
     }),
   )
-  return Object.fromEntries(entries)
+
+  return dataObject
 }
 
 </script>

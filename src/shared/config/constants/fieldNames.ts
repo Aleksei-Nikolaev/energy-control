@@ -63,3 +63,4 @@ export const fieldNames = {
   t_vod_za_psn1: "Т воды за ПСН1",
   t_vod_za_psn2: "Т воды за ПСН2"
 }
+

@@ -1,8 +1,8 @@
 import {ApiService} from "@/app/providers/api/index";
-import {lastSensorValues} from "@/app/providers/api/types/sensorsService";
+import { LastSensorValues } from '@/app/providers/api/types'
 
 export class SensorService extends ApiService {
-    getValues(): Promise<lastSensorValues> {
+    getValues(): Promise<LastSensorValues> {
         return this.get('/last')
     }
 }

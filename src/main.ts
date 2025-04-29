@@ -3,7 +3,7 @@ import App from './app/App.vue'
 import { router } from '@/app/router'
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import PrimeVue from 'primevue/config'
-import { themePreset } from '@/shared/config/themePreset'
+import { themePreset } from '@/shared/config/constants/themePreset'
 import apiPlugin from '@/app/providers/api/apiPlugin'
 
 const app = createApp(App)
@@ -18,7 +18,5 @@ const app = createApp(App)
     },
   },
 })
-
-document.title = 'Показания оборудования'
 
 app.mount('#app')
